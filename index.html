@@ -1,464 +1,87 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Student Activity Dashboard</title>
-<style>
-  :root {
-    --bg: #f1f5f9;
-    --header-bg: #ffffff;
-    --header-border: #e5e7eb;
-    --card-bg: #ffffff;
-    --card-border: #e7eaee;
-    --text-primary: #0f172a;
-    --text-secondary: #64748b;
-    --text-muted: #94a3b8;
-    --input-bg: #ffffff;
-    --input-border: #e2e8f0;
-    --blue: #2563eb;
-    --blue-hover: #1d4ed8;
-    --green-border: #16a34a;
-    --green-bg: #dcfce7;
-    --green-text: #15803d;
-    --orange-border: #c2410c;
-    --btn-secondary-bg: #ffffff;
-    --btn-secondary-border: #e2e8f0;
-    --btn-secondary-text: #0f172a;
-    --btn-secondary-hover: #f8fafc;
-    --btn-delete-bg: #fee2e2;
-    --btn-delete-text: #dc2626;
-    --btn-delete-hover: #fecaca;
-    --student-card-bg: #f8fafc;
-    --student-card-border: #e7eaee;
-    --segmented-bg: #f1f5f9;
-    --segmented-active-bg: #ffffff;
-    --segmented-active-text: #2563eb;
-    --segmented-text: #64748b;
-    --empty-border: #cbd5e1;
-    --toggle-btn-bg: #ffffff;
-    --toggle-btn-border: #e2e8f0;
-    --toggle-btn-text: #0f172a;
-    --focus-ring: #93c5fd;
-    --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04);
-  }
-
-  html[data-theme="dark"] {
-    --bg: #0f172a;
-    --header-bg: #0f172a;
-    --header-border: #1e293b;
-    --card-bg: #1e293b;
-    --card-border: #2c3b52;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
-    --input-bg: #16233a;
-    --input-border: #334155;
-    --blue: #3b82f6;
-    --blue-hover: #60a5fa;
-    --green-border: #22c55e;
-    --green-bg: rgba(34, 197, 94, 0.16);
-    --green-text: #4ade80;
-    --orange-border: #eab308;
-    --btn-secondary-bg: #16233a;
-    --btn-secondary-border: #334155;
-    --btn-secondary-text: #f8fafc;
-    --btn-secondary-hover: #1e2c45;
-    --btn-delete-bg: rgba(220, 38, 38, 0.18);
-    --btn-delete-text: #f87171;
-    --btn-delete-hover: rgba(220, 38, 38, 0.28);
-    --student-card-bg: #16233a;
-    --student-card-border: #2c3b52;
-    --segmented-bg: #16233a;
-    --segmented-active-bg: #1e293b;
-    --segmented-active-text: #60a5fa;
-    --segmented-text: #94a3b8;
-    --empty-border: #334155;
-    --toggle-btn-bg: #f8fafc;
-    --toggle-btn-border: #e2e8f0;
-    --toggle-btn-text: #0f172a;
-    --focus-ring: #3b82f6;
-    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.25);
-  }
-
-  * { box-sizing: border-box; }
-
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text-primary);
-    padding-top: env(safe-area-inset-top, 0px);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    transition: background 0.15s ease, color 0.15s ease;
-  }
-
-  .container {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  header.topbar {
-    background: var(--header-bg);
-    border-bottom: 1px solid var(--header-border);
-    padding-top: calc(32px + env(safe-area-inset-top, 0px));
-  }
-
-  .topbar-inner {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 20px;
-    padding-bottom: 28px;
-    flex-wrap: wrap;
-  }
-
-  h1 {
-    margin: 0 0 8px 0;
-    font-size: 30px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-  }
-
-  .subtitle {
-    margin: 0;
-    color: var(--text-secondary);
-    font-size: 15px;
-    line-height: 1.5;
-    max-width: 520px;
-  }
-
-  .theme-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--toggle-btn-bg);
-    color: var(--toggle-btn-text);
-    border: 1px solid var(--toggle-btn-border);
-    border-radius: 10px;
-    padding: 10px 16px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .theme-btn:hover { filter: brightness(0.97); }
-
-  main.container { padding-top: 28px; padding-bottom: 40px; }
-
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-
-  .stat-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-left: 4px solid transparent;
-    border-radius: 10px;
-    padding: 18px 20px;
-    box-shadow: var(--shadow-card);
-  }
-  .stat-blue { border-left-color: var(--blue); }
-  .stat-green { border-left-color: var(--green-border); }
-  .stat-orange { border-left-color: var(--orange-border); }
-
-  .stat-label {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    margin-bottom: 10px;
-  }
-
-  .stat-value { font-size: 30px; font-weight: 800; }
-
-  .card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: var(--shadow-card);
-    margin-bottom: 24px;
-  }
-
-  .card h2 {
-    margin: 0 0 20px 0;
-    font-size: 19px;
-    font-weight: 800;
-  }
-
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px 24px;
-    margin-bottom: 20px;
-  }
-
-  .field label {
-    display: block;
-    font-size: 13px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-
-  .field input,
-  .field select {
-    width: 100%;
-    padding: 11px 14px;
-    border: 1px solid var(--input-border);
-    border-radius: 8px;
-    background: var(--input-bg);
-    color: var(--text-primary);
-    font-size: 14px;
-    font-family: inherit;
-  }
-
-  .field input::placeholder { color: var(--text-muted); }
-
-  .field input:focus,
-  .field select:focus {
-    outline: none;
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px var(--focus-ring);
-  }
-
-  .field select { appearance: auto; cursor: pointer; }
-
-  .btn-primary {
-    background: var(--blue);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 20px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-  }
-  .btn-primary:hover { background: var(--blue-hover); }
-
-  .list-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
-  .list-header h2 { margin: 0; }
-
-  .list-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  #searchInput {
-    padding: 10px 14px;
-    border: 1px solid var(--input-border);
-    border-radius: 8px;
-    background: var(--input-bg);
-    color: var(--text-primary);
-    font-size: 14px;
-    font-family: inherit;
-    width: 220px;
-  }
-  #searchInput::placeholder { color: var(--text-muted); }
-  #searchInput:focus {
-    outline: none;
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px var(--focus-ring);
-  }
-
-  .filter-tabs {
-    display: inline-flex;
-    background: var(--segmented-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    padding: 3px;
-    gap: 2px;
-  }
-
-  .filter-tab {
-    border: none;
-    background: transparent;
-    color: var(--segmented-text);
-    font-size: 13px;
-    font-weight: 600;
-    padding: 7px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-
-  .filter-tab.active {
-    background: var(--segmented-active-bg);
-    color: var(--segmented-active-text);
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
-  }
-
-  .empty-state {
-    border: 1.5px dashed var(--empty-border);
-    border-radius: 10px;
-    padding: 48px 20px;
-    text-align: center;
-  }
-  .empty-title { margin: 0 0 6px 0; font-weight: 700; font-size: 15px; }
-  .empty-sub { margin: 0; color: var(--text-secondary); font-size: 14px; }
-
-  .students-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 16px;
-  }
-
-  .student-card {
-    background: var(--student-card-bg);
-    border: 1px solid var(--student-card-border);
-    border-radius: 10px;
-    padding: 18px;
-  }
-
-  .student-name { font-weight: 800; font-size: 16px; margin: 0 0 10px 0; }
-  .student-meta { margin: 0 0 4px 0; font-size: 13.5px; color: var(--text-secondary); }
-
-  .status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12.5px;
-    font-weight: 700;
-    border-radius: 999px;
-    padding: 5px 12px;
-    margin: 10px 0 14px 0;
-  }
-  .status-pill.active { background: var(--green-bg); color: var(--green-text); }
-  .status-pill.inactive { background: var(--btn-delete-bg); color: var(--btn-delete-text); }
-  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-
-  .student-actions { display: flex; gap: 10px; }
-
-  .btn-secondary,
-  .btn-delete {
-    border: none;
-    border-radius: 8px;
-    padding: 9px 14px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-  }
-  .btn-secondary {
-    background: var(--btn-secondary-bg);
-    color: var(--btn-secondary-text);
-    border: 1px solid var(--btn-secondary-border);
-  }
-  .btn-secondary:hover { background: var(--btn-secondary-hover); }
-  .btn-delete { background: var(--btn-delete-bg); color: var(--btn-delete-text); }
-  .btn-delete:hover { background: var(--btn-delete-hover); }
-
-  footer {
-    text-align: center;
-    padding: 20px 20px calc(40px + env(safe-area-inset-bottom, 0px));
-    color: var(--text-secondary);
-    font-size: 13px;
-  }
-
-  @media (max-width: 640px) {
-    .stats { grid-template-columns: 1fr; }
-    .form-grid { grid-template-columns: 1fr; }
-    .list-header { align-items: flex-start; }
-    #searchInput { width: 100%; }
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Activity Dashboard</title>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-<header class="topbar">
-  <div class="container topbar-inner">
-    <div>
-      <h1>Student Activity Dashboard</h1>
-      <p class="subtitle">Use this dashboard to manage student activities: add students, search them, change their status, and remove them.</p>
+  <header>
+    <div class="container header-inner">
+      <div>
+        <h1>Student Activity Dashboard</h1>
+        <p>Use this dashboard to manage student activities: add students, search them, change their status, and remove them.</p>
+      </div>
+      <button id="themeBtn" class="theme-btn">🌙 Dark Mode</button>
     </div>
-    <button class="theme-btn" id="themeToggle" type="button">🌙 Dark Mode</button>
-  </div>
-</header>
+  </header>
 
-<main class="container">
+  <main class="container">
 
-  <section class="stats">
-    <div class="stat-card stat-blue">
-      <div class="stat-label">Total Students</div>
-      <div class="stat-value" id="totalCount">0</div>
-    </div>
-    <div class="stat-card stat-green">
-      <div class="stat-label">Active Students</div>
-      <div class="stat-value" id="activeCount">0</div>
-    </div>
-    <div class="stat-card stat-orange">
-      <div class="stat-label">Inactive Students</div>
-      <div class="stat-value" id="inactiveCount">0</div>
-    </div>
-  </section>
+    <!-- Statistics -->
+    <section class="stats">
+      <div class="stat total"><span>Total Students</span><strong id="totalCount">0</strong></div>
+      <div class="stat active"><span>Active Students</span><strong id="activeCount">0</strong></div>
+      <div class="stat inactive"><span>Inactive Students</span><strong id="inactiveCount">0</strong></div>
+    </section>
 
-  <section class="card">
-    <h2>Add a New Student</h2>
-    <form id="studentForm">
-      <div class="form-grid">
-        <div class="field">
-          <label for="studentName">Student Name</label>
-          <input type="text" id="studentName" placeholder="e.g. John Doe" autocomplete="off">
+    <!-- Add student form -->
+    <section class="card">
+      <h2>Add a New Student</h2>
+      <form id="studentForm">
+        <div class="form-grid">
+          <div>
+            <label for="name">Student Name</label>
+            <input type="text" id="name" placeholder="e.g. John Doe" required>
+          </div>
+          <div>
+            <label for="studentId">Student ID</label>
+            <input type="text" id="studentId" placeholder="e.g. CSE-101" required>
+          </div>
+          <div>
+            <label for="department">Department</label>
+            <input type="text" id="department" placeholder="e.g. CSE" required>
+          </div>
+          <div>
+            <label for="status">Status</label>
+            <select id="status">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
         </div>
-        <div class="field">
-          <label for="studentIdInput">Student ID</label>
-          <input type="text" id="studentIdInput" placeholder="e.g. CSE-101" autocomplete="off">
-        </div>
-        <div class="field">
-          <label for="departmentInput">Department</label>
-          <input type="text" id="departmentInput" placeholder="e.g. CSE" autocomplete="off">
-        </div>
-        <div class="field">
-          <label for="statusInput">Status</label>
-          <select id="statusInput">
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
+        <button type="submit" class="btn-primary">+ Add Student</button>
+      </form>
+    </section>
+
+    <!-- Student list -->
+    <section class="card">
+      <div class="list-header">
+        <h2>Students</h2>
+        <div class="controls">
+          <input type="text" id="search" placeholder="Search by name or ID...">
+          <div class="filters">
+            <button class="filter-btn selected" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="active">Active</button>
+            <button class="filter-btn" data-filter="inactive">Inactive</button>
+          </div>
         </div>
       </div>
-      <button type="submit" class="btn-primary">+ Add Student</button>
-    </form>
-  </section>
 
-  <section class="card">
-    <div class="list-header">
-      <h2>Students</h2>
-      <div class="list-controls">
-        <input type="text" id="searchInput" placeholder="Search by name or ID...">
-        <div class="filter-tabs" id="filterTabs">
-          <button class="filter-tab active" data-filter="all" type="button">All</button>
-          <button class="filter-tab" data-filter="active" type="button">Active</button>
-          <button class="filter-tab" data-filter="inactive" type="button">Inactive</button>
-        </div>
+      <div id="emptyState" class="empty">
+        <strong id="emptyTitle">No students added yet.</strong>
+        <p id="emptyText">Add your first student using the form above.</p>
       </div>
-    </div>
-    <div id="listArea">
-      <div class="empty-state" id="emptyState">
-        <p class="empty-title">No students added yet.</p>
-        <p class="empty-sub">Add your first student using the form above.</p>
-      </div>
-    </div>
-  </section>
 
-</main>
+      <div id="studentList" class="student-grid"></div>
+    </section>
 
-<footer>
-  <p>Built with plain HTML, CSS and JavaScript to practice DOM manipulation.</p>
-</footer>
+  </main>
 
-<script src="script.js"></script>
+  <footer>Built with plain HTML, CSS and JavaScript to practice DOM manipulation.</footer>
 
+  <script src="./script.js"></script>
 </body>
 </html>
